@@ -21,6 +21,45 @@ function App() {
       setPosition(position + delta);
     }
   }
+
+  const [size, setSize] = useState(100); // Initial size of the square
+  const initialTouch = useRef(null);
+
+  // Function to resize the square based on deltaY
+  const customScrollMobile = (deltaY) => {
+    // Ensure the square size doesn’t go below a minimum size
+    const delta = -0.2*deltaY;
+    if (position >= 5400 + height + 0.35*window.innerHeight && delta > 0) {
+      return;
+    }
+    if (position > 0 || (position <= 0 && delta > 0)) {
+      setPosition(position + delta);
+    }
+  };
+
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 1) {
+            e.preventDefault(); // Prevent default behavior on touch start
+
+      // Save the initial Y position and current size of the square
+      initialTouch.current = {
+        y: e.touches[0].pageY,
+        size,
+      };
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    e.preventDefault()
+    if (e.touches.length === 1 && initialTouch.current?.y) {
+      const deltaY = e.touches[0].pageY - initialTouch.current.y; // Calculate the delta Y
+      customScrollMobile(deltaY); // Call the resizeSquare function with deltaY
+    }
+  };
+
+
+
+
   const AMCalcSlider = () => {
     //Calculate the slider's position relative to the respective side, for the about me section
     if (position < 1000) {
@@ -80,15 +119,18 @@ function App() {
     <>
       <div
         id="background"
+         onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
         style={{
           width: "100%",
-          height: "100vh",
+          height: "100%",
           position: "absolute",
           right: 0,
           top: 0,
           overflow: "hidden",
           backgroundSize: "cover",
           minHeight: "100%",
+          touchAction: 'none',
           backgroundColor: CalcBackground(),
         }}
       >
@@ -172,7 +214,7 @@ function App() {
               style={{
                 color: "#cbcbf2",
                 textAlign: "center",
-                fontSize: 100 - Math.floor(10000 / window.innerWidth) + "px",
+                fontSize: "10vw",
               }}
             >
               About Me
@@ -207,7 +249,7 @@ function App() {
                 <h1
                   style={{
                     fontSize:
-                      position < 4400 ? 0.1 * (position - 2700) : 170 + "px",
+                      position < 4400 ? 15/1700 * (position - 2700) + "vw": 15 + "vw",
                   }}
                 >
                   Experience
@@ -254,7 +296,7 @@ function App() {
                 style={{
                   width: "80%",
                   position: "absolute",
-                  top: .25 * window.innerHeight -( 2*height + 2 * (5140 - position)),
+                  top: .25 * window.innerHeight + 100*window.innerHeight/window.innerWidth -( 2*height + 2 * (5140 - position)),
                   display: "flex",
                   justifyContent: "center",
                   padding: "10%",
