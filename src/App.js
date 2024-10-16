@@ -186,7 +186,7 @@ function App() {
               Hello! My name is Dylan Connolly, I am a student at BU majoring
               in mathematics and computer science. I spend my time coding (competitive
               coding especially), playing chess, reading and cooking. I have a
-              good amount of experience with machine learning, website deisgn,
+              good amount of experience with machine learning, website design,
               and complicated data structures. Welcome to my own personal
               website, I hope you enjoy it.
             </h1>
